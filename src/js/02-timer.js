@@ -10,6 +10,8 @@ const refs = {
   secondsEl: document.querySelector('[data-seconds]'),
 };
 
+let dateChanges = 0;
+
 refs.btnStartCounter.setAttribute('disabled', 'true');
 
 flatpickr(refs.inputDateValue, {
@@ -18,13 +20,36 @@ flatpickr(refs.inputDateValue, {
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    if (selectedDates[0].getTime() > new Date().getTime()) {
-      const date = selectedDates[0].getTime() - new Date().getTime();
-      writeCountdownValue(convertMs(date));
-      refs.btnStartCounter.removeAttribute('disabled');
-      return;
+    if (selectedDates[0].getTime() < new Date().getTime()) {
+      return alert('Please choose a date in the future');
     }
-    return alert('Please choose a date in the future');
+
+    refs.btnStartCounter.removeAttribute('disabled');
+
+    refs.btnStartCounter.addEventListener('click', () => {
+      refs.btnStartCounter.setAttribute('disabled', 'true'),
+        setInterval(() => {
+          // !i have made here the interval in 100ms becouse in anouther way
+          // !it would be big interval in updating on the screen
+
+          const date = selectedDates[0].getTime() - new Date().getTime();
+
+          const actualdate = convertMs(date);
+
+          addLeadingZero(actualdate);
+        }, 100);
+    });
+  },
+
+  onChange: (selectedDates, dateStr, instance) => {
+    dateChanges++;
+    console.log(instance);
+
+    if (dateChanges === 2) {
+      if (instance._initialDate !== selectedDates[0]) {
+        location.reload();
+      }
+    }
   },
 });
 
@@ -47,10 +72,11 @@ function convertMs(ms) {
   return { days, hours, minutes, seconds };
 }
 
-function writeCountdownValue(fn) {
-  const { days, hours, minutes, seconds } = fn;
-  refs.daysEl.textContent = days.padStart(2, '0');
-  refs.hoursEl.textContent = hours.padStart(2, '0');
-  refs.minutesEl.textContent = minutes.padStart(2, '0');
-  refs.secondsEl.textContent = seconds.padStart(2, '0');
+function addLeadingZero(value) {
+  refs.daysEl.textContent = `${value.days}`.padStart(2, '0');
+  refs.hoursEl.textContent = `${value.hours}`.padStart(2, '0');
+  refs.minutesEl.textContent = `${value.minutes}`.padStart(2, '0');
+  refs.secondsEl.textContent = `${value.seconds}`.padStart(2, '0');
+
+  // console.log(toString(value.minutes));
 }

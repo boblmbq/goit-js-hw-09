@@ -27,24 +27,24 @@ flatpickr(refs.inputDateValue, {
     refs.btnStartCounter.removeAttribute('disabled');
 
     refs.btnStartCounter.addEventListener('click', () => {
-      refs.btnStartCounter.setAttribute('disabled', 'true'),
-        setInterval(() => {
-          // !i have made here the interval in 100ms becouse in anouther way
-          // !it would be big interval in updating on the screen
+      refs.btnStartCounter.setAttribute('disabled', 'true');
+      const a = setInterval(() => {
+        // !i have made here the interval in 100ms becouse in anouther way
+        // !it would be big interval in updating on the screen
 
-          const date = selectedDates[0].getTime() - new Date().getTime();
+        const date = selectedDates[0].getTime() - new Date().getTime();
 
-          const actualdate = convertMs(date);
-
+        const actualdate = convertMs(date);
+        if (Object.values(actualdate).every(e => e == 0)) {
+          clearInterval(a)
+        }
           addLeadingZero(actualdate);
-        }, 100);
+      }, 1000);
     });
   },
 
   onChange: (selectedDates, dateStr, instance) => {
     dateChanges++;
-    console.log(instance);
-
     if (dateChanges === 2) {
       if (instance._initialDate !== selectedDates[0]) {
         location.reload();
@@ -77,6 +77,4 @@ function addLeadingZero(value) {
   refs.hoursEl.textContent = `${value.hours}`.padStart(2, '0');
   refs.minutesEl.textContent = `${value.minutes}`.padStart(2, '0');
   refs.secondsEl.textContent = `${value.seconds}`.padStart(2, '0');
-
-  // console.log(toString(value.minutes));
 }

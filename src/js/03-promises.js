@@ -23,10 +23,10 @@ function onFormSubmit(e) {
   const formData = new FormData(formEl);
   const values = Object.fromEntries(formData);
   const { delay, step, amount } = values;
-  preCreatePromis(Number(delay), Number(step), Number(amount));
+  CreatePromises(Number(delay), Number(step), Number(amount));
 }
 
-function preCreatePromis(delay, step, amount) {
+function CreatePromises(delay, step, amount) {
   let newDelay = delay;
   for (let i = 1; i <= amount; i++) {
     createPromise(i, newDelay);

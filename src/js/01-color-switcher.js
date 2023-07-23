@@ -4,6 +4,7 @@ function getRandomHexColor() {
     .padStart(6, 0)}`;
 }
 
+let changingColotInterval = null;
 const refs = {
   body: document.querySelector('body'),
   stopBtn: document.querySelector('button[data-stop]'),

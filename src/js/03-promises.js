@@ -6,12 +6,18 @@ function createPromise(position, delay) {
   const shouldResolve = Math.random() > 0.3;
   if (shouldResolve) {
     setTimeout(
-      () => Notiflix.Notify.success(`resolved, ${position}, ${delay}`),
+      () =>
+        Notiflix.Notify.success(
+          `✅ Fulfilled promise ${position} in ${delay}ms`
+        ),
       delay
     );
   } else {
     setTimeout(
-      () => Notiflix.Notify.failure(`rejected ${position}, ${delay}`),
+      () =>
+        Notiflix.Notify.failure(
+          `❌ Rejected promise ${position} in ${delay}ms`
+        ),
       delay
     );
   }
